@@ -49,11 +49,10 @@ namespace scripting
         }
 
         static string GetRestaurantsData() {
-            var restaurantStream = new StreamReader(File.OpenRead($"{restaurantsPath}/restaurants.json"));
-            var restaurantsString = restaurantStream.ReadToEnd();
-            restaurantStream.Close();
-            restaurantStream.Dispose();
-            return restaurantsString;
+            using(var restaurantStream = new StreamReader(File.OpenRead($"{restaurantsPath}/restaurants.json"))) {
+                var restaurantsString = restaurantStream.ReadToEnd();            
+                return restaurantsString;
+            }
         }
 
         static void WriteRestaurantData(Restaurant[] data) {
