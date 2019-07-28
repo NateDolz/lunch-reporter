@@ -52,7 +52,7 @@ namespace scaffoldScript
         }
 
         static void ScaffoldDatabase() {            
-            // userCollection.InsertMany(users.AsEnumerable());
+            userCollection.InsertMany(users.AsEnumerable());
             restaurantCollection.InsertMany(restaurants.AsEnumerable());
         }
     }
