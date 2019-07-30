@@ -7,5 +7,8 @@
     "test": "will be jest once things have been scaffolded out."
   },
   "author": "Nathan Dolzonek <natedolz@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "botbuilder-teams": "^0.2.7"
+  }
 }
