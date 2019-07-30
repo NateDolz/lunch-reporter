@@ -2,10 +2,10 @@
   "name": "yummytummy-bot",
   "version": "1.0.0",
   "description": "A Teams bot to hadnle all things LUNCH!",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "will be jest once things have been scaffolded out."
   },
-  "author": "",
+  "author": "Nathan Dolzonek <natedolz@gmail.com>",
   "license": "MIT"
 }
