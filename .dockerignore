@@ -1,0 +1,12 @@
+.vscode/
+.env
+.gitignore
+.git
+client/
+database/
+LICENSE
+README.md
+*/bin
+*/obj
+*/.vscode
+docker-compose.yml

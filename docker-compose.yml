@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  lunchreporterapi:
+    image: lunchreporterapi:latest
+    build: 
+      context: .
+      dockerfile: services/lunchReporterAPI/Dockerfile
+    ports: 
+      - "1050:80"
+    environment:
+      - MONGO_CONNECTION_NET_CORE_LUNCH_REPORTER=${MONGO_CONNECTION_NET_CORE_LUNCH_REPORTER}
