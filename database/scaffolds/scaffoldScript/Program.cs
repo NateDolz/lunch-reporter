@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
-
+using DataModels;
 
 namespace scaffoldScript
 {
@@ -60,35 +57,5 @@ namespace scaffoldScript
       userCollection.InsertMany(users.AsEnumerable());
       restaurantCollection.InsertMany(restaurants.AsEnumerable());
     }
-  }
-
-  class User
-  {
-    [BsonId]
-    [JsonProperty("_id")]
-    public string Id { get; set; }
-
-    [BsonElement("firstname")]
-    [JsonProperty("firstname")]
-    public string FirstName { get; set; }
-
-    [BsonElement("lastname")]
-    [JsonProperty("lastname")]
-    public string LastName { get; set; }
-  }
-
-  class Restaurant
-  {
-    [BsonId]
-    [JsonProperty("_id")]
-    public string Id { get; set; }
-
-    [BsonElement("name")]
-    [JsonProperty("name")]
-    public string Name { get; set; }
-
-    [BsonElement("ratings")]
-    [JsonProperty("ratings")]
-    public Dictionary<string, double> Ratings { get; set; }
   }
 }
