@@ -3,13 +3,13 @@ WORKDIR /app
 EXPOSE 80
 
 WORKDIR /src
-COPY ["services/lunchReporterAPI/LunchReporterAPI.csproj", "services/lunchReporterAPI/"]
-COPY ["services/dataModels/DataModels.csproj", "services/dataModels/"]
-RUN dotnet restore "services/lunchReporterAPI/LunchReporterAPI.csproj"
+COPY ["api/LunchReporterAPI.csproj", "api/"]
+COPY ["api/Database/Seeds/Scaffolds", "api/Scaffolds"]
+RUN dotnet restore "api/LunchReporterAPI.csproj"
 
 # Copy everything else and build
 COPY . .
-WORKDIR /src/services/lunchReporterAPI
+WORKDIR /src/api
 RUN dotnet publish LunchReporterAPI.csproj  -c Release -o /app
 
 # Build runtime image
