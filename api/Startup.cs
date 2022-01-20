@@ -31,10 +31,9 @@ namespace LunchReporterAPI
 
             var context = new DataContext(config.Mongo);
 
-
-
             services.AddSingleton<UsersRepo>(new UsersRepo(context));
             services.AddSingleton<RestaurantsRepo>(new RestaurantsRepo(context));
+            services.AddSingleton<RatingsRepo>(new RatingsRepo(context));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

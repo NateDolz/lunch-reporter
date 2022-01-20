@@ -28,6 +28,11 @@ namespace LunchReporterAPI.Database.Seeds
         static IMongoCollection<Restaurant> restaurantCollection;
 
         /// <summary>
+        /// ratings collection
+        /// </summary>
+        static IMongoCollection<Rating> ratingCollection;
+
+        /// <summary>
         /// array of restaurants to be seeded
         /// </summary>
         static Restaurant[] restaurants;
@@ -38,6 +43,11 @@ namespace LunchReporterAPI.Database.Seeds
         static User[] users;
 
         /// <summary>
+        /// array of ratings to be seeded
+        /// </summary>
+        static Rating[] ratings;
+
+        /// <summary>
         /// Run the seeder command to full the database
         /// </summary>
         /// <param name="client">The mongo client to be used to seed the db</param>
@@ -46,6 +56,7 @@ namespace LunchReporterAPI.Database.Seeds
             try
             {
                 InitializeDbCollections(client);
+                createIndexes();
                 ReadScaffolds();
                 ScaffoldDatabase();
             }
@@ -80,8 +91,26 @@ namespace LunchReporterAPI.Database.Seeds
                 restaurantCollection = database.GetCollection<Restaurant>("restaurants");
             }
 
-            if (userCollection == null || restaurantCollection == null)
+            ratingCollection = database.GetCollection<Rating>("ratings");
+            if (ratingCollection == null)
+            {
+                database.CreateCollection("ratings");
+                ratingCollection = database.GetCollection<Rating>("ratings");
+            }
+
+            if (userCollection == null || restaurantCollection == null || ratingCollection == null)
                 throw new Exception("one or more of the database collections could not be opened");
+        }
+
+        /// <summary>
+        /// create indexes and constraints on the data models
+        /// </summary>
+        static void createIndexes()
+        {
+            var discordIdKey = Builders<User>.IndexKeys.Ascending(key => key.DiscordId);
+            var indexOptions = new CreateIndexOptions();
+            indexOptions.Unique = true;
+            userCollection.Indexes.CreateOne(new CreateIndexModel<User>(discordIdKey, indexOptions));
         }
 
         /// <summary>
@@ -91,8 +120,10 @@ namespace LunchReporterAPI.Database.Seeds
         {
             var usersJsonString = File.ReadAllText(Path.Combine(scaffoldsPath, "users.json"));
             var restaurantsJsonString = File.ReadAllText(Path.Combine(scaffoldsPath, "restaurants.json"));
+            var ratingsJsonString = File.ReadAllText(Path.Combine(scaffoldsPath, "ratings.json"));
             users = JsonConvert.DeserializeObject<User[]>(usersJsonString);
             restaurants = JsonConvert.DeserializeObject<Restaurant[]>(restaurantsJsonString);
+            ratings = JsonConvert.DeserializeObject<Rating[]>(ratingsJsonString);
         }
 
         /// <summary>
@@ -100,8 +131,28 @@ namespace LunchReporterAPI.Database.Seeds
         /// </summary>
         static void ScaffoldDatabase()
         {
+            foreach (User user in users)
+            {
+                if (!string.IsNullOrEmpty(user.Id))
+                {
+                    user.Id = Guid.NewGuid().ToString();
+                }
+            }
+            foreach (Restaurant restaurant in restaurants)
+            {
+                if (!string.IsNullOrEmpty(restaurant.Id))
+                {
+                    restaurant.Id = Guid.NewGuid().ToString();
+                }
+            }
+            foreach (Rating rating in ratings)
+            {
+                rating.Id = Guid.NewGuid().ToString();
+            }
             userCollection.InsertMany(users.AsEnumerable());
             restaurantCollection.InsertMany(restaurants.AsEnumerable());
+            ratingCollection.InsertMany(ratings.AsEnumerable());
         }
+
     }
 }

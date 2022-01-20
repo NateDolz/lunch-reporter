@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using LunchReporterAPI.Models;
+using LunchReporterAPI.Responses;
 using MongoDB.Driver;
 
 namespace LunchReporterAPI.Database
@@ -11,7 +12,7 @@ namespace LunchReporterAPI.Database
     /// The restaurants helper object.
     /// Handles all interactions with the restaurants mongo collection. 
     /// </summary>
-    public class RestaurantsRepo
+    public class RestaurantsRepo : BaseRepo
     {
         /// <summary>
         /// Data context used to gain access to data collections
@@ -47,8 +48,13 @@ namespace LunchReporterAPI.Database
         /// </summary>
         /// <param name="userID">The user uid whose rated restaurants are to be fetched.</param>
         /// <returns>An enumerable object containing all restaurants that have been rated by the user.</returns>
-        public IEnumerable<Restaurant> GetRestaurantsRatedByUser(string userID) =>
-          _context.Restaurants.Find(restaurant => restaurant.Ratings.ContainsKey(userID)).ToEnumerable();
+        public IEnumerable<RatedRestaurant> GetRestaurantsRatedByUser(string userID)
+          => _context.Ratings.Find(rating => rating.UserId == userID)
+            .ToEnumerable()
+            .Select(rating =>
+              new RatedRestaurant(_context.Restaurants.Find(res => res.Id == rating.RestaurantId).First())
+              { Rating = rating.Score });
+
 
         /// <summary>
         /// Gets the top 5 restaurant's reccomended for a subset of users.
@@ -61,14 +67,14 @@ namespace LunchReporterAPI.Database
         /// An enumerable object with the user uids the reccomendations are being gathered for.
         /// </param>
         /// <returns>A list of 5 restaurants reccomended for the users.</returns>
-        public IEnumerable<Restaurant> GetRestaurantReccomendations(IEnumerable<string> users)
+        public IEnumerable<RatedRestaurant> GetRestaurantReccomendations(IEnumerable<string> users)
         {
-            var restaurants = GetAllRestaurants();
-            return (from restaurant in restaurants
-                    where users.Select(x => restaurant.Ratings.ContainsKey(x)).All(x => x)
-                    where users.Select(x => restaurant.Ratings[x] > 6.0).All(x => x)
-                    orderby users.Select(x => restaurant.Ratings[x]).Sum() / users.Count() descending
-                    select restaurant).Take(5);
+            var ratings = _context.Ratings.Find(rating => users.Contains(rating.UserId)).ToEnumerable().GroupBy(x => x.RestaurantId);
+            return (from rating in ratings
+                    where rating.Select(x => x.Score > 6.0).All(x => x)
+                    orderby rating.Select(x => x.Score).Sum() / users.Count() descending
+                    select new RatedRestaurant(GetRestaurant(rating.Key))
+                    { OverallRating = rating.Sum(x => x.Score) / rating.Count() }).Take(5);
 
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -10,15 +11,8 @@ namespace LunchReporterAPI.Models
     /// The data model for a restaurant.
     /// This data contains mappers both for the mongo database and a data response.
     /// </summary>
-    public class Restaurant
+    public class Restaurant : BaseModel
     {
-        /// <summary>
-        /// The mongo uid for the restaurant.
-        /// </summary>    
-        [BsonId]
-        [JsonProperty("_id")]
-        public string Id { get; set; }
-
         /// <summary>
         /// The English readable name for the restaurant.
         /// </summary>    
@@ -27,12 +21,10 @@ namespace LunchReporterAPI.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// The restaurant's ratings dictionary.
-        /// The Key is the mongo uid for the user who made the rating.
-        /// The Value is the double rating.
-        /// </summary>    
-        [BsonElement("ratings")]
-        [JsonProperty("ratings")]
-        public Dictionary<string, double> Ratings { get; set; }
+        /// All possible google maps place_ids
+        /// </summary>
+        [BsonElement("place_ids")]
+        [JsonProperty("place_ids")]
+        public List<string> PlaceIds {get;set;}        
     }
 }

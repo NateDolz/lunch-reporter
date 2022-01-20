@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using LunchReporterAPI.Models;
+using LunchReporterAPI.Responses;
 using LunchReporterAPI.Database;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,12 +24,19 @@ namespace LunchReporterAPI.Controllers
         private RestaurantsRepo _RestaurantsRepo { get; }
 
         /// <summary>
+        /// The ratings repo.
+        /// Will handle data fetching and mapping for rating objects.
+        /// </summary>        
+        private RatingsRepo _RatingsRepo { get; }
+
+        /// <summary>
         /// Creates the controller.
         /// </summary>
         /// <param name="helper">The resturants helper singleton as initialized in the startup file.</param>
-        public RestaurantsController(RestaurantsRepo repo)
+        public RestaurantsController(RestaurantsRepo repo, RatingsRepo ratingsRepo)
         {
             _RestaurantsRepo = repo;
+            _RatingsRepo = ratingsRepo;
         }
 
         /// <summary>
@@ -44,6 +53,12 @@ namespace LunchReporterAPI.Controllers
         /// <returns>The restaurant data for the restaurant matching with the given uid.</returns>
         [HttpGet("{id}")]
         public Restaurant GetSingleRestaurant(string id) => _RestaurantsRepo.GetRestaurant(id);
+
+        public RatedRestaurant GetRestaurantRatings(string id)
+            => new RatedRestaurant(_RestaurantsRepo.GetRestaurant(id))
+            {
+                OverallRating = _RatingsRepo.getRestaurantRatings(id).Average(x => x.Score)
+            };
 
         /// <summary>
         /// Gets a list of reccomended restaurants based on a sub set of users.

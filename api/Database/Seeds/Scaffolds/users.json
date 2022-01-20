@@ -1,62 +1,20 @@
 [
-	{
-		"firstname": "Peter",
-		"lastname": "Speak",
-		"_id": "a27a0e12"
-	},
-	{
-		"firstname": "Margaret",
-		"lastname": "Caulfield",
-		"_id": "ae18913a"
-	},
-	{
-		"firstname": "Willy",
-		"lastname": "Tang",
-		"_id": "7d573e2e"
-	},
-	{
-		"firstname": "James",
-		"lastname": "Daniel",
-		"_id": "a2c16f94"
-	},
-	{
-		"firstname": "Nathan",
-		"lastname": "Dolzonek",
-		"_id": "7f9ccde1"
-	},
-	{
-		"firstname": "Daniel",
-		"lastname": "Powers",
-		"_id": "cd773e21"
-	},
-	{
-		"firstname": "Luke",
-		"lastname": "Larew",
-		"_id": "c2f94c8b"
-	},
-	{
-		"firstname": "Lane",
-		"lastname": "Little",
-		"_id": "b1159b73"
-	},
-	{
-		"firstname": "Frank",
-		"lastname": "Edwards",
-		"_id": "3e7739ce"
-	},
-	{
-		"firstname": "Michael",
-		"lastname": "Henry",
-		"_id": "a49c2f7c"
-	},
-	{
-		"firstname": "Haden",
-		"lastname": "Downey",
-		"_id": "d0512e9b"
-	},
-	{
-		"firstname": "Aaron",
-		"lastname": "Christian",
-		"_id": "362388e0"
-	}
+  {
+    "first_name": "Peter",
+    "last_name": "Speak",
+    "discord_name": "user_1",
+    "discord_id": "p_speak"
+  },
+  {
+    "first_name": "Willy",
+    "last_name": "Tang",
+    "discord_name": "user_3",
+    "discord_id": "w_tang"
+  },
+  {
+    "first_name": "Nathan",
+    "last_name": "Dolzonek",
+    "discord_name": "user_5",
+    "discord_id": "n_dolzonek"
+  }
 ]

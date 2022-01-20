@@ -1,0 +1,57 @@
+[
+    {
+        "score": 9,
+        "user_id": "n_dolzonek",
+        "restaurant_id": "res_1"
+    },
+    {
+        "score": 6,
+        "user_id": "n_dolzonek",
+        "restaurant_id": "res_2"
+    },
+    {
+        "score": 8,
+        "user_id": "n_dolzonek",
+        "restaurant_id": "res_3"
+    },
+    {
+        "score":7,
+        "user_id": "n_dolzonek",
+        "restaurant_id": "res_5"
+    },
+    {
+        "score": 10,
+        "user_id": "p_speak",
+        "restaurant_id": "res_1"
+    },
+    {
+        "score": 9,
+        "user_id": "p_speak",
+        "restaurant_id": "res_2"
+    },
+    {
+        "score": 5,
+        "user_id": "p_speak",
+        "restaurant_id": "res_5"
+    },
+    {
+        "score": 3,
+        "user_id": "p_speak",
+        "restaurant_id": "res_4"
+    },
+    {
+        "score": 8,
+        "user_id": "w_tang",
+        "restaurant_id": "res_1"
+    },
+    {
+        "score": 6,
+        "user_id": "w_tang",
+        "restaurant_id": "res_5"
+    },
+    {
+        "score": 1,
+        "user_id": "w_tang",
+        "restaurant_id": "res_3"
+    }
+]

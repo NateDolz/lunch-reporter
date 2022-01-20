@@ -29,6 +29,12 @@ namespace LunchReporterAPI.Database
         public IMongoCollection<User> Users => _db.GetCollection<User>("users");
 
         /// <summary>
+        /// A collection of ratings tying users and restaurants together
+        /// </summary>
+        /// <typeparam name="Ratings">The ratings data model</typeparam>        
+        public IMongoCollection<Rating> Ratings => _db.GetCollection<Rating>("ratings");
+
+        /// <summary>
         /// Constructs a new Data context using the database configuration loaded at run time
         /// </summary>
         /// <param name="config">The mongo config object</param>

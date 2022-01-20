@@ -2,13 +2,14 @@ using System;
 using MongoDB.Driver;
 using LunchReporterAPI.Models;
 using System.Collections.Generic;
+using LunchReporterAPI.Responses;
 
 namespace LunchReporterAPI.Database
 {
     /// <summary>
     /// The users helper responsible for interacting with data from the users mongo collection.
     /// </summary>
-    public class UsersRepo
+    public class UsersRepo : BaseRepo
     {
 
         /// <summary>
@@ -35,29 +36,60 @@ namespace LunchReporterAPI.Database
         /// <summary>
         /// Gets a single user from the user collection.    
         /// </summary>
-        /// <param name="id">The user's uid.</param>
+        /// <param name="id">The user's uid or discord id.</param>
         /// <returns>The user object whose mongo Id cooresponds with the given uid.</returns>
         public User GetUser(string id) =>
-          _context.Users.Find(user => user.Id == id).SingleOrDefault();
+          _context.Users.Find(user => user.DiscordId == id).SingleOrDefault();
 
         /// <summary>
-        /// Gets a user object with all of the users raing information mapped with it.
+        /// Creates a single user entry into the users collection
         /// </summary>
-        /// <param name="user">The user whose ratings will be mapped.</param>
-        /// <param name="ratedRestaurants">All restaurants the user has a raing record for.</param>
-        /// <returns>A user object with all restaurant data mapped inside it.</returns>
-        public UserAndRatedRestaurants MapUserAndRatedRestaurants(User user, IEnumerable<Restaurant> ratedRestaurants)
+        /// <param name="user">The user to be inserted should include a first_name and a last_name</param>
+        public void CreateUser(User user)
         {
-            var userAndRatings = new UserAndRatedRestaurants(user);
-            foreach (var restaurant in ratedRestaurants)
+            Console.Out.WriteLine(user.DiscordName);
+            Console.Out.WriteLine(user.DiscordId);
+            _context.Users.InsertOne(user);
+        }
+
+        /// <summary>
+        /// Create a restaurant rating by a given user
+        /// </summary>
+        /// <param name="userId">The users discord ID</param>
+        /// <param name="restaurantID">The name of the restaurant</param>
+        /// <param name="rating">The rating</param>
+        public void UserRateRestaurant(string userId, string restaurantName, int rating)
+        {
+            var restaurants = _context.Restaurants.Find(rest => rest.Name == restaurantName);
+            if (restaurants.CountDocuments() == 0)
             {
-                userAndRatings.Ratings[restaurant.Id] = new RatedRestaurant()
+                _context.Restaurants.InsertOne(new Restaurant()
                 {
-                    Name = restaurant.Name,
-                    Rating = restaurant.Ratings[user.Id]
-                };
+                    Id = Guid.NewGuid().ToString(),
+                    Name = restaurantName
+                });
+                restaurants = _context.Restaurants.Find(rest => rest.Name == restaurantName);
             }
-            return userAndRatings;
+
+            var restaurant = _context.Restaurants.Find(rest => rest.Name == restaurantName).Single();
+
+            _context.Ratings.InsertOne(new Rating()
+            {
+                RestaurantId = restaurant.Id,
+                UserId = userId,
+                Score = rating,
+            });
+        }
+
+        /// <summary>
+        /// Does a full update on the user.
+        /// </summary>
+        /// <param name="id">The user's discord id</param>
+        /// <param name="updatedUser">The fully updated user object.</param>
+        public void UpdateUser(string id, User updatedUser)
+        {
+            var filter = Builders<User>.Filter.Eq(user => user.DiscordId, updatedUser.DiscordId);
+            _context.Users.ReplaceOne(filter, updatedUser);
         }
     }
 }
