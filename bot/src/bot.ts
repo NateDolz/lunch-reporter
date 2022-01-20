@@ -23,8 +23,8 @@ export const server = http.createServer((req, res) => {
   res.end('Need open port for bot\n')
 })
 
-server.listen(8080, () => {
-  console.log('listening on port', 8080)
+server.listen(80, () => {
+  console.log('listening on port', 80)
 })
 
 client.login(process.env.BOT_TOKEN)
