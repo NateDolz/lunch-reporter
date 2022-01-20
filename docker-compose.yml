@@ -2,40 +2,20 @@ version: '3.4'
 
 services:
 
+  bot:
+    env_file: ./bot/.env
+    build:
+      dockerfile: Dockerfile
+      context: ./bot  
+
   api:
     image: lunchreporterapi:latest
     env_file: .env
     build: 
-      context: .
-      dockerfile: api/Dockerfile
+      context: ./api
+      dockerfile: Dockerfile
     ports: 
       - "1050:80" 
-    depends_on:
-      - mongo
-
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "${Mongo__User}"
-      MONGO_INITDB_ROOT_PASSWORD: "${Mongo__Password:-secret}"
-      MONGO_INITDB_DATABASE: "${Mongo__Database}"
-    ports: 
-      - "27017:27017"
-    volumes:
-      - "mongodatabase:/data/db"
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: "${Mongo__User}"
-      ME_CONFIG_MONGODB_ADMINPASSWORD: "${Mongo__Password:-secret}"
-      ME_CONFIG_MONGODB_URL: "${Mongo__ConnectionString}"
-    depends_on:
-      - mongo
 
 volumes:
   mongodatabase:
