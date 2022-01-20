@@ -35,6 +35,6 @@ namespace LunchReporterAPI.Config
         /// </summary>        
         public string ConnectionString => string.IsNullOrEmpty(User) || string.IsNullOrEmpty(Password)
             ? $"mongodb://{Host}:{Port}"
-            : $"mongodb://{User}:{Password}@{Host}:{Port}";
+            : $"mongodb+srv://{User}:{Password}@{Host}";
     }
 }
