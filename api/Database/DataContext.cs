@@ -40,6 +40,8 @@ namespace LunchReporterAPI.Database
         /// <param name="config">The mongo config object</param>
         public DataContext(MongoConfig config)
         {
+            Console.Out.WriteLine(config.ConnectionString);
+
             var client = new MongoClient(config.ConnectionString);
             _db = client.GetDatabase(config.Database);
 
